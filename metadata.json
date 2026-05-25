@@ -1,5 +1,5 @@
 {
-  "name": "FF14 RP Macro Organizer",
+  "name": "FFXIV TC RP MARCO STUDIO｜RP巨集工坊",
   "description": "一個為最終幻想14 (FF14) RP角色扮演玩家打造的殿堂級巨集整理工具！支援分頁多分類、15行與180字數即時提醒、關鍵字搜尋，並提供便攜的設定檔匯入匯出與預設RP劇本模板。",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
