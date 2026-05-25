@@ -837,7 +837,7 @@ export default function App() {
                       {activeCategory?.name || '請新增或選取分頁'}
                       {activeCategory && (
                         <span className="text-xs font-mono font-normal text-stone-500 italic block sm:inline sm:ml-2.5">
-                          (包含 {activeCategory.macros.length} 段劇集巨集)
+                          (包含 {activeCategory.macros.length} 段巨集)
                         </span>
                       )}
                     </h2>
@@ -895,7 +895,7 @@ export default function App() {
                     </div>
                     <div>
                       <h3 className="text-sm font-semibold text-stone-850">
-                        {searchQuery ? '未找到匹配的巨集劇本' : '劇集目錄尚無內容'}
+                        {searchQuery ? '未找到匹配的巨集' : '巨集目錄尚無內容'}
                       </h3>
                       <p className="text-xs text-stone-500 mt-1 max-w-sm mx-auto leading-relaxed">
                         {searchQuery
@@ -1082,7 +1082,7 @@ export default function App() {
                   </div>
                   <div className="space-y-0.5">
                     <h4 className="font-semibold text-stone-900">
-                      <span>✍️ 劇集巨集編撰（智慧行數偵測）</span>
+                      <span>✍️ 巨集編寫（智慧行數偵測）</span>
                     </h4>
                     <p className="leading-relaxed text-[11px] text-stone-500">
                       點選右上角「新增 RP 巨集」可挑選情境標籤、設定燙金配色、撰寫台詞。若劇本單行超長（超過遊戲寬度）或總行數超過 FFXIV 限制的 15 行，系統會自動在卡片以紅框高亮警告，確保您的巨集絕不卡句！
