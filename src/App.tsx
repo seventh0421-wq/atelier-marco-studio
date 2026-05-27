@@ -55,6 +55,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchGlobal, setSearchGlobal] = useState(false);
 
+
   // Modal open states
   const [isMacroFormOpen, setIsMacroFormOpen] = useState(false);
   const [editingMacro, setEditingMacro] = useState<Macro | undefined>(undefined);
@@ -176,6 +177,39 @@ export default function App() {
       return 0;
     });
   }, [activeChar, activeCategory, searchQuery, searchGlobal, activeCategoryId]);
+
+  const handleImportData = (importedCharacters: CharacterConfig[], merge: boolean) => {
+    setData((prev) => {
+      let nextCharacters = [...prev.characters];
+      if (merge) {
+        // Append characters, merging with existing on ID match
+        importedCharacters.forEach((importedChar) => {
+          const index = nextCharacters.findIndex((c) => c.id === importedChar.id);
+          if (index !== -1) {
+            nextCharacters[index] = importedChar;
+          } else {
+            nextCharacters.push(importedChar);
+          }
+        });
+      } else {
+        // Overwrite characters
+        nextCharacters = importedCharacters;
+      }
+
+      // Safeguard: Ensure we have at least one active identity selected
+      const activeId = nextCharacters.some((c) => c.id === prev.activeCharacterId)
+        ? prev.activeCharacterId
+        : (nextCharacters[0]?.id || '');
+
+      return {
+        ...prev,
+        characters: nextCharacters,
+        activeCharacterId: activeId
+      };
+    });
+    triggerToast(merge ? '已將導入的角色劇本追加合併！' : '角色庫已完全被導入的配置覆蓋！');
+    setIsImportExportOpen(false);
+  };
 
   // CHARACTER CRUD OPERATIONS
   const handleAddNewCharacter = () => {
@@ -475,35 +509,34 @@ export default function App() {
     ) {
       setData({
         characters: DEFAULT_CHARACTERS,
-        activeCharacterId: DEFAULT_CHARACTERS[0].id
+        activeCharacterId: DEFAULT_CHARACTERS[0]?.id || ''
       });
-      setActiveCategoryId(DEFAULT_CHARACTERS[0].categories[0].id);
-      triggerToast('已成功重設為乾淨初始狀態！');
+      triggerToast('工作坊已重設至出廠設定！');
     }
   };
 
-  // IMPORT MERGE/OVERWRITE LOGIC
-  const handleImportData = (importedCharacters: CharacterConfig[], merge: boolean) => {
-    setData((prev) => {
-      const nextCharacters = merge
-        ? [...prev.characters, ...importedCharacters]
-        : importedCharacters;
-
-      return {
-        characters: nextCharacters,
-        activeCharacterId: importedCharacters[0]?.id || nextCharacters[0].id
-      };
-    });
-    triggerToast(merge ? '已成功合併導入共享角色檔案！' : '已成功一鍵覆蓋覆寫角色資料庫！');
-  };
-
   return (
-    <div className="min-h-screen bg-[#F9F7F2] text-[#1A1A1A] flex flex-col relative pb-16 font-sans">
+    <div className="flex flex-col min-h-screen bg-[#F4F2EC] text-[#2D2D2A] pb-16 font-sans">
       {/* Editorial top secondary header border */}
       <div className="w-full bg-[#FAF9F5] border-b border-[#D1CEC7] py-2">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center text-[10px] tracking-widest text-[#555552] font-mono select-none">
           <span>ATELIER MACRO SYSTEM VR-2026</span>
           <span className="hidden sm:inline">FINAL FANTASY XIV TC ROLEPLAY COMPASS UNIT</span>
+        </div>
+      </div>
+
+      {/* Suggestion alert ribbon */}
+      <div className="w-full bg-[#FAF6ED] border-b border-[#ebdcb3]/60 py-2.5 px-4 text-xs text-[#8c6717] select-none">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-sm">💻</span>
+            <span className="leading-relaxed">
+              <strong>系統提示：</strong>建議使用<strong>電腦版網頁（Desktop View）</strong>瀏覽，以確保獲得最貼近遊戲比例的排版、完整的一鍵複製功能與最流暢的巨集編輯體驗。
+            </span>
+          </div>
+          <span className="text-[10px] bg-amber-100/50 text-[#8c6717] border border-[#ebdcb3]/45 px-2 py-0.5 rounded font-mono font-bold w-fit shrink-0">
+            BEST EXPERIENCES
+          </span>
         </div>
       </div>
 
@@ -936,8 +969,19 @@ export default function App() {
 
       {/* FOOTER LORE DISCUSSIONS */}
       <footer className="mt-20 text-center text-[11px] text-stone-500 max-w-4xl mx-auto px-4 py-6 border-t border-[#D1CEC7] space-y-2 select-none italic">
-        <p className="font-sans not-italic text-stone-700 font-bold mb-1">
-          設計製作：閻羅＠奧汀
+        <p className="font-sans not-italic text-stone-700 font-bold mb-1 flex items-center justify-center gap-2 flex-wrap">
+          <span>設計製作：閻羅＠奧汀</span>
+          <span className="text-stone-300">|</span>
+          <a
+            href="https://rp-toolbox.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-[#8c6717] hover:underline hover:opacity-90 font-serif"
+            title="開啟 RP工具箱"
+          >
+            <LucideIcon name="globe" size={11} className="not-italic" />
+            RP工具箱
+          </a>
         </p>
         <p>Atelier FF14 RP Macro Studio © 2026. Designed for Final Fantasy XIV Roleplay Drama Actors.</p>
         <p className="leading-relaxed text-[10.5px]">

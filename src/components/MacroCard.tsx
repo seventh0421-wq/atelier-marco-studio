@@ -19,11 +19,16 @@ export const MacroCard: React.FC<MacroCardProps> = ({
   onMove,
   onTogglePin,
   categories,
-  currentCategoryId
+  currentCategoryId,
 }) => {
   const [copiedEntire, setCopiedEntire] = useState(false);
   const [copiedLineIndex, setCopiedLineIndex] = useState<number | null>(null);
   const [showMoveDropdown, setShowMoveDropdown] = useState(false);
+
+  // Directly adjusted font sizes for the optimal contrast and visual feedback
+  const bodyTextClass = 'text-[16px]';
+  const titleTextClass = 'text-[20px] font-bold';
+  const descTextClass = 'text-[16px]';
 
   const lines = macro.content.split('\n');
   const lineCount = lines.length;
@@ -116,7 +121,7 @@ export const MacroCard: React.FC<MacroCardProps> = ({
             <LucideIcon name={macro.icon} size={16} />
           </div>
           <div className="min-w-0">
-            <h4 className="font-serif font-bold text-[#1A1A1A] text-sm leading-tight tracking-tight flex items-center gap-1">
+            <h4 className={`font-serif text-[#1A1A1A] leading-tight tracking-tight flex items-center gap-1 ${titleTextClass}`}>
               {macro.title}
               {macro.isPinned && (
                 <span className="text-[10px] text-[#8c6717] font-mono shrink-0 select-none">
@@ -125,7 +130,7 @@ export const MacroCard: React.FC<MacroCardProps> = ({
               )}
             </h4>
             {macro.description && (
-              <p className="text-[11px] text-[#555552] mt-0.5 line-clamp-1">
+              <p className={`text-[#555552] mt-0.5 line-clamp-1 ${descTextClass}`}>
                 {macro.description}
               </p>
             )}
@@ -156,7 +161,7 @@ export const MacroCard: React.FC<MacroCardProps> = ({
           )}
 
           <span
-            className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
+            className={`text-[13px] font-mono px-2 py-0.5 rounded border ${
               isLineCountExceeded
                 ? 'bg-rose-550/10 text-rose-800 border-rose-300'
                 : 'bg-[#F4F2EC] text-stone-600 border-[#D1CEC7]'
@@ -165,8 +170,8 @@ export const MacroCard: React.FC<MacroCardProps> = ({
             {lineCount}/15 行
           </span>
           {hasAnyLineExceeded && (
-            <span className="flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-800 border border-amber-300">
-              <LucideIcon name="alert" size={10} />
+            <span className="flex items-center gap-1 text-[13px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-800 border border-amber-300">
+              <LucideIcon name="alert" size={11} />
               字數超限
             </span>
           )}
@@ -204,7 +209,7 @@ export const MacroCard: React.FC<MacroCardProps> = ({
               <div
                 key={idx}
                 onClick={() => handleCopyLine(line.text, idx)}
-                className={`relative group/line flex items-center justify-between text-xs font-mono rounded-md px-2 py-1.5 cursor-pointer transition-all ${
+                className={`relative group/line flex items-center justify-between font-mono rounded-md px-2 py-1.5 cursor-pointer transition-all ${
                   isPastLimit
                     ? 'bg-rose-50/40 text-rose-900/40 border border-dashed border-rose-205/30 line-through'
                     : isLineTooLong
@@ -214,17 +219,17 @@ export const MacroCard: React.FC<MacroCardProps> = ({
                 title="點擊單獨複製此行（適合節奏演戲）"
               >
                 <div className="flex items-center gap-2 mr-3 truncate grow">
-                  <span className={`text-[10px] select-none font-semibold ${
+                  <span className={`text-[12px] select-none font-semibold ${
                     isPastLimit ? 'text-rose-300' : isLineTooLong ? 'text-rose-600' : 'text-stone-400'
                   }`}>
                     {String(lineNum).padStart(2, '0')}
                   </span>
-                  <span className="truncate whitespace-pre-wrap text-[11px] font-mono font-medium">{line.text || ' '}</span>
+                  <span className={`truncate whitespace-pre-wrap font-mono font-medium ${bodyTextClass}`}>{line.text || ' '}</span>
                 </div>
 
                 <div className="flex items-center gap-1.5 shrink-0">
                   <span
-                    className={`text-[9px] scale-90 ${
+                    className={`text-[11px] ${
                       isLineTooLong ? 'text-rose-700 font-bold' : 'text-stone-400 group-hover/line:text-stone-600'
                     }`}
                   >
